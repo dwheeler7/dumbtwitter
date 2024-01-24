@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true },
     password: { type: String, required: true },
     username: { type: String, required: true },
-    git_url: { type: String, required: false },
+    gitUrl: { type: String, required: false },
     posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
     likes: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}]
 }, { timestamps: true })
