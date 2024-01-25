@@ -6,7 +6,7 @@ const postSchema = new mongoose.Schema({
     likesNum: { type: Number, default: 0 },
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     replies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
-})
+}, { timestamps: true })
 
 const Post = mongoose.model('Post', postSchema)
 
