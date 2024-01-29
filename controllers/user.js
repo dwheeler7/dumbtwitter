@@ -5,18 +5,18 @@ const jwt = require('jsonwebtoken')
 // authentication
 exports.auth = async (req, res, next) => {
     try {
-        const token = req.header('Authorization').replace('Bearer: ', '')
-        const data = jwt.verify(token, 'secret')
-        const user = await User.findOne({ _id: data._id })
-        if (!user) {
-            throw new Error()
-        }
-        req.user = user
-        next()
-    } catch (err) {
-        res.status(401).send('Not authorized')
+      const token = req.header('Authorization').replace('Bearer ', '')
+      const data = jwt.verify(token, process.env.JWT_SECRET)
+      const user = await User.findOne({ _id: data._id })
+      if (!user) {
+        throw new Error()
+      }
+      req.user = user      
+      next()
+    } catch (error) {
+      res.status(401).send('Not authorized')
     }
-}
+  }
 
 // create
 exports.createUser = async (req, res) => {

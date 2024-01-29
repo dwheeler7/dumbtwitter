@@ -22,7 +22,7 @@ userSchema.pre('save', async function(next) {
 
 // generate auth token method
 userSchema.methods.generateAuthToken = async function() {
-    const token = jwt.sign({ _id: this._id }, 'secret')
+    const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET)
     return token
 }
 
