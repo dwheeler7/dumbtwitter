@@ -11,16 +11,6 @@ exports.index = async (req, res) => {
     }
 }
 
-//indexUserPosts
-// exports.indexUserPosts = async (req, res) => {
-//     try {
-//         const foundUser = await User.findOne({ _id: req.params.userId }).populate('posts')
-//         res.status(200).json(foundUser.posts)
-//     } catch (err) {
-//         res.status(400).json({ message: `Could not get posts for the user with the ID, ${req.params.userId}`, details: err.message })
-//     }
-// }
-
 // create post
 exports.createPost = async (req, res) => {
     try {                       
@@ -76,10 +66,10 @@ exports.like = async (req, res) => {
 exports.update = async (req, res) => {
     try {
         const updates = Object.keys(req.body)
-        const user = await User.findOne({ _id: req.params.id })
-        updates.forEach(update => user[update] = req.body[update])
-        await user.save()
-        res.status(200).json(user)
+        const post = await Post.findOne({ _id: req.params.id })
+        updates.forEach(update => post[update] = req.body[update])
+        await post.save()
+        res.status(200).json(post)
     } catch (err) {
         res.status(400).json({ message: 'Could not update', details: err.message })
     }
