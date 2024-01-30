@@ -24,7 +24,7 @@ exports.createUser = async (req, res) => {
         const user = new User(req.body)
         await user.save()
         const token = await user.generateAuthToken()
-        res.status(200).json({ user, token })
+        res.json({ user, token })
     } catch (err) {
         res.status(400).json({ message: err.message })
     }
@@ -32,11 +32,11 @@ exports.createUser = async (req, res) => {
 // login
 exports.loginUser = async (req, res) => {
     try {        
-        const user = User.findOne({ _id: req.params.id })
+        const user = await User.findOne({ email: req.body.email })        
         if (!user || !await bcrypt.compare(req.body.password, user.password)) {
             res.status(400).send('Invalid login credentials')
         } else {
-            const token = await User.generateAuthToken()
+            const token = await user.generateAuthToken()
             res.json({ user, token })
         }
     } catch (err) {
@@ -56,6 +56,7 @@ exports.updateUser = async (req, res) => {
         res.status(400).json({ message: err.message })
     }
 }
+
 // delete
 exports.deleteUser = async (req, res) => {
     try {
