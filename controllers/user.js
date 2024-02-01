@@ -2,7 +2,7 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-// authentication
+// authorization
 exports.auth = async (req, res, next) => {
     try {
       const token = req.header('Authorization').replace('Bearer ', '')
@@ -11,7 +11,7 @@ exports.auth = async (req, res, next) => {
       if (!user) {
         throw new Error()
       }
-      req.user = user      
+      req.user = user
       next()
     } catch (error) {
       res.status(401).send('Not authorized')
@@ -32,7 +32,7 @@ exports.createUser = async (req, res) => {
 // login
 exports.loginUser = async (req, res) => {
     try {        
-        const user = await User.findOne({ email: req.body.email })        
+        const user = await User.findOne({ email: req.body.email })
         if (!user || !await bcrypt.compare(req.body.password, user.password)) {
             res.status(400).send('Invalid login credentials')
         } else {

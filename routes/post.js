@@ -6,11 +6,8 @@ const auth = require('../controllers/user').auth
 
 router.use(auth)
 
-//INDUCES
-
 // Return a list of all posts
 router.get('/', postController.index)
-
 
 // Create a post
 router.post('/', postController.createPost)

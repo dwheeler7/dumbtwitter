@@ -1,4 +1,3 @@
-require('dotenv').config()
 const request = require('supertest')
 const mongoose = require('mongoose')
 const { MongoMemoryServer } = require('mongodb-memory-server')
@@ -22,8 +21,7 @@ describe('Test the user endpoints', () => {
     test('It should create a new user', async () => {
         const response = await request(app)
             .post('/users')
-            .send({ name: 'Mean Mr. Mustard', email: 'paul@beatles.com', password: '1234', username: 'paulm' })
-        console.log(response)
+            .send({ name: 'Mean Mr. Mustard', email: 'paul@beatles.com', password: '1234', username: 'paulm' })        
         expect(response.statusCode).toBe(200)
         expect(response.body.user.name).toBeDefined()
         expect(response.body.user.email).toBeDefined()
@@ -37,7 +35,7 @@ describe('Test the user endpoints', () => {
         const response = await request(app)
             .post('/users/login')
             .send({ email: 'paul@beatles.com', password: '1234' })
-        expect(response.statusCode).toBe(200)
+        expect(response.statusCode).toBe(200)        
     })
     test('It should update a user', async () => {
         // create user
@@ -52,21 +50,14 @@ describe('Test the user endpoints', () => {
         expect(response.statusCode).toBe(200)
         expect(response.body.name).toBe('Polythene Pam')
         // expect status code
-    })
+    }),
     test('It should delete a user', async () => {
-        const user = new User({ name: 'Mean Mr. Mustard', email: 'paul@beatles.com', password: '1234', username: 'paulm' })
+        const user = new User({ name: 'Mean Mr. Mustard', email: 'paul@beatles.com', password: '1234', username: 'paulm' })            
         await user.save()
         const token = await user.generateAuthToken()
         const response = await request(app)
-            .delete(`/users/${user._id}`)
-            .set('Authorization', `Bearer ${token}`)
+          .delete(`/users/${user._id}`)
+          .set('Authorization', `Bearer ${token}`)
         expect(response.statusCode).toBe(200)
-        
     })
-
-
 })
-
-// router.put('/:id', userController.updateUser)
-// delete
-// router.delete('/:id', userController.auth, userController.deleteUser)
