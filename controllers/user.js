@@ -24,7 +24,7 @@ exports.createUser = async (req, res) => {
         const user = new User(req.body)
         await user.save()
         const token = await user.generateAuthToken()
-        res.json({ user, token })
+        res.json(user)
     } catch (err) {
         res.status(400).json({ message: err.message })
     }
@@ -66,3 +66,4 @@ exports.deleteUser = async (req, res) => {
         res.status(400).json({ message: err.message }) 
     }
 }
+
