@@ -36,15 +36,17 @@ describe('Test the user endpoints', () => {
             .post('/users/login')
             .send({ email: 'paul@beatles.com', password: '1234' })
         expect(response.statusCode).toBe(200)        
-    })
+    }),
     test('It should update a user', async () => {
         // create user
         const user = new User({ name: 'Mean Mr. Mustard', email: 'paul@beatles.com', password: '1234', username: 'paulm' })    
         // save
-        await user.save()
+        await user.save()   
+        const token = await user.generateAuthToken()     
         // put request
         const response = await request(app)
-            .put(`/users/${user._id}`)
+            .put(`/users/${user._id}`)            
+            .set('Authorization', `Bearer ${token}`)
             .send({ name: 'Polythene Pam' })
         // expect properties
         expect(response.statusCode).toBe(200)
@@ -58,6 +60,13 @@ describe('Test the user endpoints', () => {
         const response = await request(app)
           .delete(`/users/${user._id}`)
           .set('Authorization', `Bearer ${token}`)
+        expect(response.statusCode).toBe(200)
+    }),
+    test('It should show a user', async () => {
+        const user = new User({ name: 'Mean Mr. Mustard', email: 'paul@beatles.com', password: '1234', username: 'paulm' })            
+        await user.save()        
+        const response = await request(app)
+          .get(`/users/${user._id}`)          
         expect(response.statusCode).toBe(200)
     })
 })

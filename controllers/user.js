@@ -24,7 +24,7 @@ exports.createUser = async (req, res) => {
         const user = new User(req.body)
         await user.save()
         const token = await user.generateAuthToken()
-        res.json(user)
+        res.json({ user, token })
     } catch (err) {
         res.status(400).json({ message: err.message })
     }
@@ -43,7 +43,6 @@ exports.loginUser = async (req, res) => {
         res.status(400).json({ message: err.message })
     }
 }
-
 // update
 exports.updateUser = async (req, res) => {
     try {
@@ -61,9 +60,18 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
     try {
         await req.user.deleteOne()
-        res.json({ message: 'User deleted' })
+        res.json({ message: 'User deleted' })        
     } catch (err) {
         res.status(400).json({ message: err.message }) 
     }
 }
 
+// show
+exports.showUser = async (req, res) => {
+    try {        
+        const foundUser = await User.findOne({ _id: req.params.id })
+        res.status(200).json(foundUser)
+    } catch (err) {
+        res.status(400).json({ message: err.message })
+    } 
+}
