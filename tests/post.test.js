@@ -45,8 +45,8 @@ describe('Test the post endpoints', () => {
             .set('Authorization', `Bearer ${authToken}`)                         
             .send({ body: 'Mean Mister Mustard sleeps in the park' })
         expect(response.statusCode).toBe(200)
-        expect(response.body.newPost.body).toBeTruthy()
-        expect(user.posts[0]).toBe(response.body.newPost.body._id)
+        expect(response.body.post.body).toBeTruthy()
+        expect(user.posts[0]).toBe(response.body.post.body._id)
     }),
     test('It should create a reply', async () => {               
         const parentPost = new Post({ body: 'Mean Mister Mustard sleeps in the park' })        

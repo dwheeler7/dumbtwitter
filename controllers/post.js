@@ -14,13 +14,13 @@ exports.index = async (req, res) => {
 // create post
 exports.createPost = async (req, res) => {
     try {                       
-        const newPost = new Post(req.body)
-        await newPost.save()
-        newPost.author = req.user._id
-        await newPost.save()
-        req.user.posts.push(newPost._id)
+        const post = new Post(req.body)
+        await post.save()
+        post.author = req.user._id
+        await post.save()
+        req.user.posts.push(post._id)
         await req.user.save()
-        res.status(200).json({newPost, user: req.user })
+        res.status(200).json({post, user: req.user })
     } catch (err) {
         res.status(400).json({ message: 'Could not add post to database', details: err.message })
     }
@@ -39,7 +39,7 @@ exports.createReply = async (req, res) => {
         await reply.save()                        
         parentPost.replies.push(reply._id)
         await parentPost.save()        
-        res.status(200).json({reply, parentPost})
+        res.status(200).json({reply, parentPost, user: req.user})
     } catch (err) {
         res.status(400).json({ message: 'Could not create a reply', details: err.message })
     }
@@ -56,7 +56,7 @@ exports.like = async (req, res) => {
         post.likesNum ++
         await user.save()
         await post.save()
-        res.status(200).json( { message: 'User successfully liked post', post })
+        res.status(200).json({ post, user})
     } catch(err) {
         res.status(400).json({ message: 'Could not like post', details: err.message })
     }
@@ -79,7 +79,7 @@ exports.update = async (req, res) => {
 exports.destroy = async (req, res) => {
     try {
         const deleted = await Post.findOneAndDelete({ _id: req.params.id })
-        res.status(200).json({ message: `The post with the id, ${deleted._id} was successfully deleted.` })
+        res.status(200).json({ message: 'User deleted' })
     } catch (err) {
         res.status(400).json({ message: 'Could not delete post', details: err.message })
     }
@@ -88,7 +88,7 @@ exports.destroy = async (req, res) => {
 // show post
 exports.show = async (req, res) => {
     try {
-        const foundPost = await Post.findOne({ _id: req.params.id }).populate('replies author') // look into this
+        const foundPost = await Post.findOne({ _id: req.params.id }).populate('replies author')
         res.status(200).json(foundPost)
     } catch (err) {
         res.status(400).json({ message: 'Could not find post', details: err.message })
